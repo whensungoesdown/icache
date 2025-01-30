@@ -120,9 +120,9 @@ module c7bicu
    // itag
    //
 
-   assign icu_ram_tag_addr[9:0] = ifu_icu_addr_ic1[14:5];
+   //assign icu_ram_tag_addr[9:0] = ifu_icu_addr_ic1[14:5];
    //assign icu_ram_tag_en = 2'b11;
-   assign icu_ram_tag_en = {2{ic_lu_ic1}};
+   //assign icu_ram_tag_en = {2{ic_lu_ic1}};
 
 
    wire ic_tag_way0_v_ic2;
@@ -152,13 +152,12 @@ module c7bicu
    // idata
    //
    
-   assign icu_ram_data_addr0[11:0] = {ifu_icu_addr_ic1[14:5], ifu_icu_addr_ic1[4:3]};
-   assign icu_ram_data_addr1[11:0] = {ifu_icu_addr_ic1[14:5], ifu_icu_addr_ic1[4:3]};
+   //assign icu_ram_data_addr0[11:0] = {ifu_icu_addr_ic1[14:5], ifu_icu_addr_ic1[4:3]};
+   //assign icu_ram_data_addr1[11:0] = {ifu_icu_addr_ic1[14:5], ifu_icu_addr_ic1[4:3]};
 
-   // read all ways data out
-   //assign icu_ram_data_en = {ic_tag_way1_match_ic2, ic_tag_way0_match_ic2};
-   //assign icu_ram_data_en = 2'b11; // read out both way of data
-   assign icu_ram_data_en = {2{ic_lu_ic1}};
+   // read all ways data out at ic1
+   // cache line allcation at ic2
+   //assign icu_ram_data_en = {2{ic_lu_ic1}};
 
    //assign icu_ifu_data_valid_ic2 = ic_tag_way0_match_ic2 | ic_tag_way1_match_ic2;
    assign icu_ifu_data_valid_ic2 = ic_hit_ic2 |
@@ -281,9 +280,76 @@ module c7bicu
                                                            lfb3_in ; // the cycle that biu_icu_data_last arrives lfb3_in is not registered yet
 
 
-   // Unused
-   assign icu_ram_tag_wr = 1'b0;
-   assign icu_ram_data_wr = 1'b0;
+
+   /////
+   /// cache line allocation
+   //
+
+   wire ic_al_ic2;
+   wire ic_al_way01_ic2_q;
+
+   assign ic_al_ic2 = ic_miss_ic2;
+
+   // default is way0, unless way0 is occupied and way1 is available
+   // reset to 0 at the last cycle of allocation, that is when
+   // biu_icu_data_last is signaled
+   //assign ic_al_way01_ic2 = ic_tag_way0_v_ic2 & ~ic_tag_way1_v_ic2;
+   dffrle_s #(1) ic_al_way01_ic2_reg (
+      .clk   (clk),
+      .rst_l (resetn),
+      .din   ((ic_tag_way0_v_ic2 & ~ic_tag_way1_v_ic2) & ~biu_icu_data_last),
+      .en    (ic_al_ic2 | biu_icu_data_last),
+      .q     (ic_al_way01_ic2_q),
+      .se(), .si(), .so());
+
+//   wire ic_al_ic2_q;
+//
+//   dffrle_s #(1) ic_al_ic_reg (
+//      .clk   (clk),
+//      .rst_l (resetn),
+//      .din   (ic_al_ic2 & ~biu_icu_data_last),
+//      .en    (ic_al_ic2 | biu_icu_data_last),
+//      .q     (ic_al_ic2_q),
+//      .se(), .si(), .so());
+   
+
+   // update idata
+   // icu_ram_data_en is used both in ic1 and ic2
+   assign icu_ram_data_en = {2{ic_lu_ic1}} | {{2{~ic_lu_ic1}} & {ic_al_way01_ic2_q == 1'b0 ? 2'b01 : 2'b10}};
+   assign icu_ram_data_wr = biu_icu_data_valid;
+
+
+   wire [1:0] al_cnt_in;
+   wire [1:0] al_cnt_q;
+
+   assign al_cnt_in = {{2{icu_biu_req}} & 2'b00} |
+                       {{2{~icu_biu_req}} & {al_cnt_q + 2'b01}};
+
+   dffrle_s #(2) al_cnt_reg (
+      .clk   (clk),
+      .rst_l (resetn),
+      .din   (al_cnt_in),
+      .en    (icu_biu_req | biu_icu_data_valid),
+      .q     (al_cnt_q),
+      .se(), .si(), .so());
+
+   //assign icu_ram_data_addr0 = ic_lu_addr_ic2[14:3];
+   //assign icu_ram_data_addr1 = ic_lu_addr_ic2[14:3];
+   assign icu_ram_data_addr0 = {{12{ic_lu_ic1}} & ifu_icu_addr_ic1[14:3]} | {{{12{~ic_lu_ic1}} & {ic_lu_addr_ic2[14:5], al_cnt_q[1:0]}}};
+   assign icu_ram_data_addr1 = {{12{ic_lu_ic1}} & ifu_icu_addr_ic1[14:3]} | {{{12{~ic_lu_ic1}} & {ic_lu_addr_ic2[14:5], al_cnt_q[1:0]}}};
+   assign icu_ram_data_wdata0 = biu_icu_data;
+   assign icu_ram_data_wdata1 = biu_icu_data;
+   
+   // update itag
+   // update tag at last cycle
+   //assign icu_ram_tag_en = {2{ic_lu_ic1}} | biu_icu_data_last;
+   assign icu_ram_tag_en = {2{ic_lu_ic1}} | {{2{~ic_lu_ic1}} & {ic_al_way01_ic2_q == 1'b0 ? 2'b01 : 2'b10}};
+   assign icu_ram_tag_wr = biu_icu_data_last;
+
+   //
+   assign icu_ram_tag_addr = {{10{ic_lu_ic1}} & ifu_icu_addr_ic1[14:5]} | {{10{~ic_lu_ic1}} & ic_lu_addr_ic2[14:5]};
+   assign icu_ram_tag_wdata0 = {1'b1, ic_lu_addr_ic2[31:11]};
+   assign icu_ram_tag_wdata1 = {1'b1, ic_lu_addr_ic2[31:11]};
 
 endmodule
    

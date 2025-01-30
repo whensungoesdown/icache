@@ -59,3 +59,11 @@ add wave -position end  result:/top_tb/u_top/u_icu/ifu_icu_addr_ic1
 add wave -position end  result:/top_tb/u_top/u_icu/ifu_icu_req_ic1
 
 add wave -divider
+
+add wave -position end  result:/top_tb/u_top/u_icu/ic_lu_ic1
+add wave -position end  result:/top_tb/u_top/u_icu/ic_lu_ic2
+add wave -position end  result:/top_tb/u_top/u_icu/ic_al_way01_ic2_q
+add wave -position end  result:/top_tb/u_top/u_icu/ic_al_ic2
+add wave -position end  result:/top_tb/u_top/u_icu/ic_lfb_hit_data_valid
+
+add wave -divider

@@ -100,11 +100,24 @@ module top_tb(
 		u_top.biu_icu_data_valid <= #70 1'b0;
 		u_top.biu_icu_data_last <= #60 1'b1;
 		u_top.biu_icu_data_last <= #70 1'b0;
+
+
+
+		// query icache again
+	 	ifu_icu_req_ic1 <= #150 1'b1;
+	 	//ifu_icu_addr_ic1 <= #40 addr[31:3]; // addr is x at the this moment, dont know why
+	 	ifu_icu_addr_ic1 <= #150 'h2022;
+
+	 	//#10;
+	 	ifu_icu_req_ic1 <= #160 1'b0;
+	 	ifu_icu_addr_ic1 <= #160 'h0;
+		flag <= #160 1'b0;
          end
 
 
+	 // icache request after cacheline allocation, the cache line should be valid
 	 if (1'b1 == u_top.icu_ifu_data_valid_ic2 &&
-	     64'hcccccccccccccccc === icu_ifu_data_ic2 
+	     64'hdddddddddddddddd === icu_ifu_data_ic2 
             )
 	 begin
 		 $display("\nPASS!\n");
