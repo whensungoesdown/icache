@@ -32,9 +32,9 @@ module top_tb(
 	 ifu_icu_req_ic1 = 1'b0;
 	 ifu_icu_addr_ic1 = 'h0;
  
-	 u_top.biu_icu_ack <= 1'b0;
-	 u_top.biu_icu_data_last <= 1'b0;
-	 u_top.biu_icu_data_valid <= 1'b0;
+	 //u_top.biu_icu_ack <= 1'b0;
+	 //u_top.biu_icu_data_last <= 1'b0;
+	 //u_top.biu_icu_data_valid <= 1'b0;
 
 	 flag = 1'b0;
 	 
@@ -74,32 +74,32 @@ module top_tb(
 	 $display("reset %b", resetn);
 
          // a trick of using flag to make biu_icu_ack only be signaled for 1 cycle
-	 if (1'b1 == u_top.icu_biu_req && flag == 1'b0) 
-	 begin
-		u_top.biu_icu_ack <= 1'b1;
-		flag = 1'b1;
-		u_top.biu_icu_ack <= #10 1'b0;
-         end
+//	 if (1'b1 == u_top.icu_biu_req && flag == 1'b0) 
+//	 begin
+//		u_top.biu_icu_ack <= 1'b1;
+//		flag = 1'b1;
+//		u_top.biu_icu_ack <= #10 1'b0;
+//         end
 
 	 if (1'b1 == u_top.biu_icu_ack) 
 	 begin
-		u_top.biu_icu_data <= 'hbbbbbbbbbbbbbbbb;		 
-		u_top.biu_icu_data_valid <= 1'b1;
-		u_top.biu_icu_data_valid <= #10 1'b0;
-
-		u_top.biu_icu_data <= #20 'hcccccccccccccccc;		 
-		u_top.biu_icu_data_valid <= #20 1'b1;
-		u_top.biu_icu_data_valid <= #30 1'b0;
-
-		u_top.biu_icu_data <= #40 'hdddddddddddddddd;		 
-		u_top.biu_icu_data_valid <= #40 1'b1;
-		u_top.biu_icu_data_valid <= #50 1'b0;
-
-		u_top.biu_icu_data <= #60 'heeeeeeeeeeeeeeee;		 
-		u_top.biu_icu_data_valid <= #60 1'b1;
-		u_top.biu_icu_data_valid <= #70 1'b0;
-		u_top.biu_icu_data_last <= #60 1'b1;
-		u_top.biu_icu_data_last <= #70 1'b0;
+//		u_top.biu_icu_data <= 'hbbbbbbbbbbbbbbbb;		 
+//		u_top.biu_icu_data_valid <= 1'b1;
+//		u_top.biu_icu_data_valid <= #10 1'b0;
+//
+//		u_top.biu_icu_data <= #20 'hcccccccccccccccc;		 
+//		u_top.biu_icu_data_valid <= #20 1'b1;
+//		u_top.biu_icu_data_valid <= #30 1'b0;
+//
+//		u_top.biu_icu_data <= #40 'hdddddddddddddddd;		 
+//		u_top.biu_icu_data_valid <= #40 1'b1;
+//		u_top.biu_icu_data_valid <= #50 1'b0;
+//
+//		u_top.biu_icu_data <= #60 'heeeeeeeeeeeeeeee;		 
+//		u_top.biu_icu_data_valid <= #60 1'b1;
+//		u_top.biu_icu_data_valid <= #70 1'b0;
+//		u_top.biu_icu_data_last <= #60 1'b1;
+//		u_top.biu_icu_data_last <= #70 1'b0;
 
 
 

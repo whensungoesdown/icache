@@ -195,6 +195,18 @@ module c7bicu
    assign biu_rd_busy = lf_inprog_q; // | others
 
 
+   // bug scenario
+   // ic_miss_ic2   : __-____
+   // biu_icu_ack   : __-____
+   // lf_req_q      : ___----
+   // icu_biu_req   : ___----
+   // in this case, icu_biu_req <-- lf_req_q will not be unsignaled, because ack will not come again.
+   // then icu repeatly request a line fill.
+   // So, use biu_rd_busy instead of biu_icu_ack
+   // ic_miss_ic2   : __-____
+   // biu_rd_busy   : ___----
+   // lf_req_q      : ___-___
+   // icu_biu_req   : ___-___
 
    wire lf_req_q;
 
@@ -202,13 +214,16 @@ module c7bicu
       .din   (ic_miss_ic2),
       .clk   (clk),
       .rst_l (resetn),
-      .en    (ic_miss_ic2 | biu_icu_ack),
+      //.en    (ic_miss_ic2 | biu_icu_ack),
+      .en    (ic_miss_ic2 | biu_rd_busy),
       .q     (lf_req_q),
       .se(), .si(), .so());
 
    assign icu_biu_req = (lf_req_q | ic_miss_ic2) & ~biu_rd_busy;
 
-   assign icu_biu_addr = ic_lu_addr_ic2;
+   assign icu_biu_addr = {ic_lu_addr_ic2[31:5], 2'b00}; // line fill at 64-byte boundary
+
+   assign icu_biu_single = 1'b0;  // line fill, not single, actually this is known to biu
 
    //wire linefill_en;
    //assign linefill_en = lf_inprog_q;

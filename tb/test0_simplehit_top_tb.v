@@ -30,9 +30,9 @@ module top_tb(
 	 ifu_icu_req_ic1 = 1'b0;
 	 ifu_icu_addr_ic1 = 'h0;
 
-	 u_top.biu_icu_ack <= 1'b0;
-	 u_top.biu_icu_data_last <= 1'b0;
-	 u_top.biu_icu_data_valid <= 1'b0;
+	 //u_top.biu_icu_ack <= 1'b0;
+	 //u_top.biu_icu_data_last <= 1'b0;
+	 //u_top.biu_icu_data_valid <= 1'b0;
  
 	 
 	 resetn <= #32 1'b1;

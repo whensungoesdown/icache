@@ -67,3 +67,19 @@ add wave -position end  result:/top_tb/u_top/u_icu/ic_al_ic2
 add wave -position end  result:/top_tb/u_top/u_icu/ic_lfb_hit_data_valid
 
 add wave -divider
+
+add wave -position end  result:/top_tb/u_top/u_icu/biu_icu_ack
+add wave -position end  result:/top_tb/u_top/u_icu/biu_icu_data
+add wave -position end  result:/top_tb/u_top/u_icu/biu_icu_data_last
+add wave -position end  result:/top_tb/u_top/u_icu/biu_icu_data_valid
+
+add wave -divider
+
+add wave -position end  result:/top_tb/u_top/u_icu/ic_lfb_hit_data
+add wave -position end  result:/top_tb/u_top/u_icu/biu_icu_data_last
+add wave -position end  result:/top_tb/u_top/u_biu/biu_icu_data_last
+add wave -position end  result:/top_tb/u_top/u_biu/u_axi_interface/axi_rdata_last
+add wave -position end  result:/top_tb/u_top/u_biu/u_axi_interface/ext_biu_r_last
+add wave -position end  result:/top_tb/u_top/u_axi_ram_bridge/m_rlast
+
+add wave -divider
