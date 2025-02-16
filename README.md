@@ -9,7 +9,7 @@
 
 -----------------------
 
-2 ways
+2 ways, each way has a 22-bit tag ram and a 64-bit data ram.
 
 
 `````c
