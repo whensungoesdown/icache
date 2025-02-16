@@ -8,8 +8,9 @@
 
 
 -----------------------
+256-bit cache line
 
-2 ways, each way has a 22-bit tag ram and a 64-bit data ram.
+2 ways, each way has a 22-bit tag ram and 4 64-bit data ram.
 
 
 `````c
