@@ -7,3 +7,29 @@
 ![screenshot1](https://github.com/whensungoesdown/icache/blob/main/doc/png/cache_miss_allocate1.png)
 
 
+-----------------------
+
+2 ways
+
+
+`````c
+ 32-bit address
+
+    |____________________|___________|
+   31       tag        11 10         0
+`````
+
+````c
+
+ tag ram 22-bit, [21] v, [20:0] tag
+
+   v
+  |_|____________________|
+ 21 20      tag          0
+
+
+ data ram 64-bit
+
+    |______________________________________________________________________|
+   63                                data                                  0
+`````
