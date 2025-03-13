@@ -8,9 +8,11 @@
 
 
 -----------------------
+16KB L1 instruction cache
+
 256-bit cache line
 
-2 ways, each way has a 22-bit tag ram and 4 64-bit data ram.
+2-way set associative, each way has a 22-bit tag ram and 4 64-bit data ram.
 
 
 `````c
