@@ -218,16 +218,16 @@ module axi_sram_bridge(
 
    assign m_wready = ~w_busy;
    
-   wire [5+64+8-1:0] wpayload_in;
-   wire [5+64+8-1:0] wpayload_q;
-   wire [4:0] m_wid_q;
+   wire [4+64+8-1:0] wpayload_in;
+   wire [4+64+8-1:0] wpayload_q;
+   wire [3:0] m_wid_q;
    wire [7:0] m_wstrb_q;
 
    assign wpayload_in = {m_wid, m_wdata, m_wstrb};
    assign {m_wid_q, ram_wdata, m_wstrb_q} = wpayload_q;
 
 
-   dffe_s #(5+64+8) wpayload_reg (
+   dffe_s #(4+64+8) wpayload_reg (
       .din   (wpayload_in),
       .clk   (aclk),
       .en    (w_enter),

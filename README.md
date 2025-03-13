@@ -15,9 +15,24 @@
 
 `````c
  32-bit address
-
+ 
     |____________________|___________|
    31       tag        11 10         0
+`````
+
+
+`````c
+
+ 10-bit index, 1024 sets
+
+ tag ram index
+
+ ifu_icu_addr_ic1[14:5]
+
+
+ data ram index, last 2-bit addresses ram line
+
+ {ic_lu_addr_ic2[14:5], al_cnt_q[1:0]}
 `````
 
 ````c

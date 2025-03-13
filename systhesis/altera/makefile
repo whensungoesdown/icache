@@ -7,6 +7,11 @@
 
 PROJECT = top
 SOURCE_FILES =  ../../rtl/c7bicu/c7bicu.v \
+		../../rtl/c7bbiu/c7bbiu_axi_interface.v \
+		../../rtl/c7bbiu/c7bbiu_rd_arb.v \
+		../../rtl/c7bbiu/c7bbiu_wr_arb.v \
+		../../rtl/c7bbiu/c7bbiu.v \
+		../../rtl/axi_sram_bridge.v \
 		../../rtl/lib/swrvr_clib.v \
 		../../rtl/lib/swrvr_dlib.v \
 		../../rtl/models/c7b_cache_rams.v \
@@ -14,6 +19,7 @@ SOURCE_FILES =  ../../rtl/c7bicu/c7bicu.v \
 		../../rtl/models/ram22_way1.v \
 		../../rtl/models/ram64.v \
 		../../rtl/models/ram64_way1.v \
+		../../rtl/models/sram.v \
 		../../rtl/top.v
 
 

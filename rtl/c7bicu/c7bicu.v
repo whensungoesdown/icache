@@ -221,7 +221,7 @@ module c7bicu
 
    assign icu_biu_req = (lf_req_q | ic_miss_ic2) & ~biu_rd_busy;
 
-   assign icu_biu_addr = {ic_lu_addr_ic2[31:5], 2'b00}; // line fill at 64-byte boundary
+   assign icu_biu_addr = {ic_lu_addr_ic2[31:5], 2'b00}; // line fill at 32-byte boundary
 
    assign icu_biu_single = 1'b0;  // line fill, not single, actually this is known to biu
 
